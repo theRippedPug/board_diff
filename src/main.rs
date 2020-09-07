@@ -41,11 +41,14 @@ fn el_passauntest() {
 
 	let mep = ChessMove::new(Square::A5, Square::B6, None);
 
-	let boardt5 = boardt4.make_move_new(mep);
+	let boardt5 = boardt4.make_move_new(mep.clone());
 
 	let s1 = reneder_hepler::get_matrix(&boardt4);
 	let s2 = reneder_hepler::get_matrix(&boardt5);
 
 	println!("{:?}", abstract_move_parser::get_diff(&s1, &s2));
-	println!("{:?}", abstract_move_parser::parse(s1, s2));
+	println!(
+		"{:?}",
+		abstract_move_parser::parse(s1, s2, mep.get_promotion().is_some())
+	);
 }

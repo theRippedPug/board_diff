@@ -74,11 +74,16 @@ pub enum PieceDest {
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum PieceOrigin {
 	Existing(ActualPos),
-	Reserved(i8),
+	Reserve,
+}
+#[derive(Debug)]
+pub enum AbstractMove {
+	RegularMove(RegularMove),
+	Catstling((ActualPos, ActualPos)),
 }
 
 #[derive(Debug)]
-pub struct AbstractMove {
+pub struct RegularMove {
 	pub origin: PieceOrigin,
 	pub dest: PieceDest,
 }
