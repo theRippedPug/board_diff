@@ -1,97 +1,12 @@
+//Remove when done
+#![allow(unused_imports)]
+//Remove when done
+
 use chess::{Board, ChessMove, Color, Square};
 pub mod chess_structs;
-use chess_structs::{AbstractPhysicalMove, BoardRep, PieceCoord, PieceDest, PieceOrigin};
+use chess_structs::{AbstractMove, BoardRep, PieceCoord, PieceDest, PieceOrigin};
+pub mod abstract_move_parser;
 pub mod reneder_hepler;
-
-pub fn get_diff(board1: BoardRep, board2: BoardRep) -> Vec<PieceCoord> {
-	let mut mismatch_list = Vec::<PieceCoord>::new();
-	for i in 0..8 {
-		for j in 0..8 {
-			if board1[i][j] != board2[i][j] {
-				mismatch_list.push((j, i))
-			}
-		}
-	}
-	mismatch_list
-}
-
-pub fn get_move_list(board1: BoardRep, board2: BoardRep) -> Vec<AbstractPhysicalMove> {
-	let points = get_diff(board1, board2);
-	let p1 = points[0];
-	let p2 = points[1];
-
-	//first two ifs are for relocation move
-	if (board1[p1.1][p1.0].is_none())
-		&& (board2[p1.1][p1.0].is_some())
-		&& (board1[p2.1][p2.0].is_some())
-		&& (board2[p2.1][p2.0].is_none())
-	{
-		return vec![AbstractPhysicalMove {
-			origin: PieceOrigin::Existing(p2),
-			dest: PieceDest::OnBoard(p1),
-		}];
-	} else if (board1[p2.1][p2.0].is_none())
-		&& (board2[p2.1][p2.0].is_some())
-		&& (board1[p1.1][p1.0].is_some())
-		&& (board2[p1.1][p1.0].is_none())
-	{
-		return vec![AbstractPhysicalMove {
-			origin: PieceOrigin::Existing(p1),
-			dest: PieceDest::OnBoard(p2),
-		}];
-	//these two ifs are for capture condition
-	} else if board1[p1.1][p1.0].is_some()
-		&& board1[p2.1][p2.0].is_some()
-		&& board2[p1.1][p1.0].is_some()
-		&& board2[p2.1][p2.0].is_none()
-	{
-		return vec![
-			AbstractPhysicalMove {
-				origin: PieceOrigin::Existing(p1),
-				dest: PieceDest::Disposed,
-			},
-			AbstractPhysicalMove {
-				origin: PieceOrigin::Existing(p2),
-				dest: PieceDest::OnBoard(p1),
-			},
-		];
-	} else if board1[p1.1][p1.0].is_some()
-		&& board1[p2.1][p2.0].is_some()
-		&& board2[p1.1][p1.0].is_none()
-		&& board2[p2.1][p2.0].is_some()
-	{
-		return vec![
-			AbstractPhysicalMove {
-				origin: PieceOrigin::Existing(p2),
-				dest: PieceDest::Disposed,
-			},
-			AbstractPhysicalMove {
-				origin: PieceOrigin::Existing(p1),
-				dest: PieceDest::OnBoard(p2),
-			},
-		];
-	} else {
-		if board1[p1.1][p1.0].unwrap().piece_type == chess_structs::ChessPieceType::Rook {
-			vec![
-				AbstractPhysicalMove {
-					origin: PieceOrigin::Existing(p1),
-					dest: PieceDest::OffToSide(p1),
-				},
-				AbstractPhysicalMove {
-					origin: PieceOrigin::Existing(p2),
-					dest: PieceDest::OnBoard(p1),
-				},
-				AbstractPhysicalMove {
-					origin: PieceOrigin::OffToSide(p1),
-					dest: PieceDest::OnBoard(p2),
-				},
-			]
-		} else {
-			//TODO: write an errormessage nad send it to error channel
-			Vec::<AbstractPhysicalMove>::new()
-		}
-	}
-}
 
 fn main() {
 	let board1 = Board::default();
@@ -100,8 +15,37 @@ fn main() {
 
 	let board2 = board1.make_move_new(m);
 
-	let s1 = reneder_hepler::getMatrix(&board1);
-	let s2 = reneder_hepler::getMatrix(&board2);
+	let s1 = reneder_hepler::get_matrix(&board1);
+	let s2 = reneder_hepler::get_matrix(&board2);
 
-	println!("{:?}", get_diff(s1, s2));
+	println!("{:?}", abstract_move_parser::get_diff(&s1, &s2));
+
+	println!(
+		"{:?} , {:?} , {:?}",
+		board1.piece_on(Square::E8),
+		board1.color_on(Square::E8),
+		reneder_hepler::get_matrix(&board1)[7][4]
+	);
+}
+#[test]
+fn el_passauntest() {
+	let board_init = Board::default();
+	let m1 = ChessMove::new(Square::A2, Square::A4, None);
+	let m2 = ChessMove::new(Square::E7, Square::E6, None);
+	let m3 = ChessMove::new(Square::A4, Square::A5, None);
+	let m4 = ChessMove::new(Square::B7, Square::B5, None);
+	let boardt1 = board_init.make_move_new(m1);
+	let boardt2 = boardt1.make_move_new(m2);
+	let boardt3 = boardt2.make_move_new(m3);
+	let boardt4 = boardt3.make_move_new(m4);
+
+	let mep = ChessMove::new(Square::A5, Square::B6, None);
+
+	let boardt5 = boardt4.make_move_new(mep);
+
+	let s1 = reneder_hepler::get_matrix(&boardt4);
+	let s2 = reneder_hepler::get_matrix(&boardt5);
+
+	println!("{:?}", abstract_move_parser::get_diff(&s1, &s2));
+	println!("{:?}", abstract_move_parser::parse(s1, s2));
 }

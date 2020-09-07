@@ -1,3 +1,6 @@
+use chess::{File, Rank, Square};
+use std::fmt;
+
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum ChessPieceType {
 	Pawn = 0,
@@ -21,7 +24,41 @@ pub struct PiecePos {
 //	pawn,bishop,knight,rook,queen,king
 // )
 
-#[derive(Debug,Copy, Clone, Eq, PartialEq)]
+//a struct that represents position in a way thats mathematically workable
+pub type ActualPos = (u8, u8);
+
+trait ToActualPos {
+	fn to_actual_pos(&self) -> ActualPos;
+}
+
+impl ToActualPos for Square {
+	fn to_actual_pos(&self) -> ActualPos {
+		(
+			match self.get_rank() {
+				Rank::First => 0,
+				Rank::Second => 1,
+				Rank::Third => 2,
+				Rank::Fourth => 3,
+				Rank::Fifth => 4,
+				Rank::Sixth => 5,
+				Rank::Seventh => 6,
+				Rank::Eighth => 7,
+			},
+			match self.get_file() {
+				File::A => 0,
+				File::B => 1,
+				File::C => 2,
+				File::D => 3,
+				File::E => 4,
+				File::F => 5,
+				File::G => 6,
+				File::H => 7,
+			},
+		)
+	}
+}
+
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub struct ChessPiece {
 	pub piece_color: char,
 	pub piece_type: ChessPieceType,
@@ -30,29 +67,39 @@ pub struct ChessPiece {
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum PieceDest {
 	Disposed,
-	OnBoard(PieceCoord),
-	OffToSide(PieceCoord),
+	OnBoard(ActualPos),
+	OffToSide,
 }
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum PieceOrigin {
-	New,
-	Existing(PieceCoord),
-	OffToSide(PieceCoord),
+	Existing(ActualPos),
+	Reserved(i8),
 }
 
-pub struct AbstractPhysicalMove {
+#[derive(Debug)]
+pub struct AbstractMove {
 	pub origin: PieceOrigin,
 	pub dest: PieceDest,
 }
 
-pub enum MoveType{
+#[derive(Debug)]
+pub struct ParseError {}
+impl fmt::Display for ParseError {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		write!(f, "SuperError is here!")
+	}
+}
+impl std::error::Error for ParseError {}
+
+#[derive(Debug)]
+pub enum MoveType {
 	Relocation,
 	Capture,
 	Promotion,
 	CapturePromotion,
 	ElPassaunt,
-	Castling
+	Castling,
 }
 
 pub type BoardRep = [[Option<ChessPiece>; 8]; 8];
