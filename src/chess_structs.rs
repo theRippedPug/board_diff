@@ -81,6 +81,7 @@ pub enum AbstractMove {
 	RegularMove(RegularMove),
 	Catstling((ActualPos, ActualPos)),
 }
+pub type AbstractMoveList = Result<Vec<AbstractMove>, ParseError>;
 
 #[derive(Debug)]
 pub struct RegularMove {
@@ -109,3 +110,17 @@ pub enum MoveType {
 
 pub type BoardRep = [[Option<ChessPiece>; 8]; 8];
 pub type PieceCoord = (usize, usize);
+
+pub type PhysicalPos = (f32,f32);
+
+#[derive(Debug)]
+pub enum MovementSpeed{
+	Slow,
+	Normal
+}
+#[derive(Debug)]
+pub struct PhysicalMove{
+	start: PhysicalPos,
+	end: PhysicalPos,
+	speed: MovementSpeed
+}

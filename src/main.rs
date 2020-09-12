@@ -4,9 +4,12 @@
 
 use chess::{Board, ChessMove, Color, Square};
 pub mod chess_structs;
-use chess_structs::{AbstractMove, BoardRep, PieceCoord, PieceDest, PieceOrigin};
+use chess_structs::{AbstractMove, BoardRep, PieceDest, PieceOrigin};
 pub mod abstract_move_parser;
-pub mod reneder_hepler;
+pub mod physical_move_parser;
+pub mod parse_helper;
+#[macro_use]
+extern crate lazy_static;
 
 fn main() {
 	let board1 = Board::default();
@@ -15,8 +18,8 @@ fn main() {
 
 	let board2 = board1.make_move_new(m);
 
-	let s1 = reneder_hepler::get_matrix(&board1);
-	let s2 = reneder_hepler::get_matrix(&board2);
+	let s1 = parse_helper::get_matrix(&board1);
+	let s2 = parse_helper::get_matrix(&board2);
 
 	println!("{:?}", abstract_move_parser::get_diff(&s1, &s2));
 
@@ -24,7 +27,7 @@ fn main() {
 		"{:?} , {:?} , {:?}",
 		board1.piece_on(Square::E8),
 		board1.color_on(Square::E8),
-		reneder_hepler::get_matrix(&board1)[7][4]
+		parse_helper::get_matrix(&board1)[7][4]
 	);
 }
 #[test]
@@ -43,8 +46,8 @@ fn el_passauntest() {
 
 	let boardt5 = boardt4.make_move_new(mep.clone());
 
-	let s1 = reneder_hepler::get_matrix(&boardt4);
-	let s2 = reneder_hepler::get_matrix(&boardt5);
+	let s1 = parse_helper::get_matrix(&boardt4);
+	let s2 = parse_helper::get_matrix(&boardt5);
 
 	println!("{:?}", abstract_move_parser::get_diff(&s1, &s2));
 	println!(

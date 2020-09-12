@@ -55,7 +55,7 @@ pub fn parse(
 								// (so its not at i) also it's not an empty
 								if k != i && board1[k.1][k.0].is_some() {
 									// now we generate the remove the piece that gets captured
-									finalvec.push(AbstractMove::RegularMove(RegularMove {
+									finalvec.insert(0,AbstractMove::RegularMove(RegularMove {
 										origin: PieceOrigin::Existing((k.0 as u8, k.1 as u8)),
 										dest: PieceDest::OffToSide,
 									}));
@@ -171,7 +171,7 @@ pub fn parse(
 									}));
 									for k in &diffs {
 										if k != i && board1[k.1][k.0].is_some() {
-											finalvec.push(AbstractMove::RegularMove(RegularMove {
+											finalvec.insert(0,AbstractMove::RegularMove(RegularMove {
 												origin: PieceOrigin::Existing((
 													k.0 as u8, k.1 as u8,
 												)),
