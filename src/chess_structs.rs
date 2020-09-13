@@ -25,14 +25,14 @@ pub struct PiecePos {
 // )
 
 //a struct that represents position in a way thats mathematically workable
-pub type ActualPos = (u8, u8);
+pub type AbstractPos = (u8, u8);
 
-trait ToActualPos {
-	fn to_actual_pos(&self) -> ActualPos;
+trait ToAbstractPos {
+	fn to_actual_pos(&self) -> AbstractPos;
 }
 
-impl ToActualPos for Square {
-	fn to_actual_pos(&self) -> ActualPos {
+impl ToAbstractPos for Square {
+	fn to_actual_pos(&self) -> AbstractPos {
 		(
 			match self.get_rank() {
 				Rank::First => 0,
@@ -67,21 +67,19 @@ pub struct ChessPiece {
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum PieceDest {
 	Disposed,
-	OnBoard(ActualPos),
-	OffToSide,
+	OnBoard(AbstractPos),
 }
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum PieceOrigin {
-	Existing(ActualPos),
+	Existing(AbstractPos),
 	Reserve,
 }
 #[derive(Debug)]
 pub enum AbstractMove {
 	RegularMove(RegularMove),
-	Catstling((ActualPos, ActualPos)),
+	Catstling((AbstractPos, AbstractPos)),
 }
-pub type AbstractMoveList = Result<Vec<AbstractMove>, ParseError>;
 
 #[derive(Debug)]
 pub struct RegularMove {
