@@ -198,7 +198,7 @@ fn find_surround_nodes(board: &BoardRep, node: PathNode) -> Vec<PathNode> {
 			surround_nodes.push(new_node);
 		}
 	}
-	if top &&right {
+	if top && right {
 		let new_pos = (node.pos.0 + 0.5, node.pos.1 + 0.5);
 		if new_pos.1.fract() == 0.0
 			&& new_pos.0.fract() == 0.0
@@ -219,7 +219,7 @@ fn find_surround_nodes(board: &BoardRep, node: PathNode) -> Vec<PathNode> {
 			surround_nodes.push(new_node);
 		}
 	}
-	if bottom &&left {
+	if botm && left {
 		let new_pos = (node.pos.0 - 0.5, node.pos.1 - 0.5);
 		if new_pos.1.fract() == 0.0
 			&& new_pos.0.fract() == 0.0
@@ -240,7 +240,7 @@ fn find_surround_nodes(board: &BoardRep, node: PathNode) -> Vec<PathNode> {
 			surround_nodes.push(new_node);
 		}
 	}
-	if bottom &&right {
+	if botm && right {
 		let new_pos = (node.pos.0 - 0.5, node.pos.1 + 0.5);
 		if new_pos.1.fract() == 0.0
 			&& new_pos.0.fract() == 0.0
@@ -261,7 +261,7 @@ fn find_surround_nodes(board: &BoardRep, node: PathNode) -> Vec<PathNode> {
 			surround_nodes.push(new_node);
 		}
 	}
-	if top &&left {
+	if top && left {
 		let new_pos = (node.pos.0 + 0.5, node.pos.1 - 0.5);
 		if new_pos.1.fract() == 0.0
 			&& new_pos.0.fract() == 0.0
