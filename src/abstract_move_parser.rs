@@ -16,7 +16,6 @@ pub fn get_diff(board1: &BoardRep, board2: &BoardRep) -> Vec<PieceCoord> {
 	mismatch_list
 }
 
-
 // NOTE: pos means position, board1 and board2 refer to inital and final
 // configs of the board
 pub fn parse(
@@ -55,10 +54,13 @@ pub fn parse(
 								// (so its not at i) also it's not an empty
 								if k != i && board1[k.1][k.0].is_some() {
 									// now we generate the remove the piece that gets captured
-									finalvec.insert(0,AbstractMove::RegularMove(RegularMove {
-										origin: PieceOrigin::Existing((k.0 as u8, k.1 as u8)),
-										dest: PieceDest::Disposed,
-									}));
+									finalvec.insert(
+										0,
+										AbstractMove::RegularMove(RegularMove {
+											origin: PieceOrigin::Existing((k.0 as u8, k.1 as u8)),
+											dest: PieceDest::Disposed,
+										}),
+									);
 								}
 							}
 							break 'outer;
@@ -171,12 +173,15 @@ pub fn parse(
 									}));
 									for k in &diffs {
 										if k != i && board1[k.1][k.0].is_some() {
-											finalvec.insert(0,AbstractMove::RegularMove(RegularMove {
-												origin: PieceOrigin::Existing((
-													k.0 as u8, k.1 as u8,
-												)),
-												dest: PieceDest::Disposed,
-											}));
+											finalvec.insert(
+												0,
+												AbstractMove::RegularMove(RegularMove {
+													origin: PieceOrigin::Existing((
+														k.0 as u8, k.1 as u8,
+													)),
+													dest: PieceDest::Disposed,
+												}),
+											);
 										}
 									}
 									break 'outer2;

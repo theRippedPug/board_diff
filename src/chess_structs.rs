@@ -109,16 +109,16 @@ pub enum MoveType {
 pub type BoardRep = [[Option<ChessPiece>; 8]; 8];
 pub type PieceCoord = (usize, usize);
 
-pub type PhysicalPos = (f32,f32);
+pub type PhysicalPos = (f32, f32);
 
 #[derive(Debug)]
-pub enum MovementSpeed{
+pub enum MovementSpeed {
 	Slow,
-	Normal
+	Normal,
 }
 #[derive(Debug)]
-pub struct PhysicalMove{
+pub struct PhysicalMove {
 	start: PhysicalPos,
 	end: PhysicalPos,
-	speed: MovementSpeed
+	speed: MovementSpeed,
 }

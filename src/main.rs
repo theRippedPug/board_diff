@@ -6,8 +6,8 @@ use chess::{Board, ChessMove, Color, Square};
 pub mod chess_structs;
 use chess_structs::{AbstractMove, BoardRep, PieceDest, PieceOrigin};
 pub mod abstract_move_parser;
-pub mod physical_move_parser;
 pub mod parse_helper;
+pub mod physical_move_parser;
 #[macro_use]
 extern crate lazy_static;
 
